@@ -9,8 +9,8 @@ import favicon from "serve-favicon";
 import amqp  from "amqplib"
 import "./v1/config/env.config";
 
-import { authMiddleware } from "./v1/middlewares";
-import { authRoutes,UserRoutes } from "./v1/routes";
+import { defaultMiddleware } from "./v1/middlewares";
+import { defaultRoutes } from "./v1/routes";
 
 // RateLimitter
 const limiter = rateLimit({
@@ -42,7 +42,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(morgan("dev"));
 app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
-// app.use(authMiddleware);
+app.use(defaultMiddleware);
 
 // Welcome Route
 app.all("/", (_req: Request, res: Response, _next: NextFunction) => {
@@ -52,8 +52,7 @@ app.all("/", (_req: Request, res: Response, _next: NextFunction) => {
 const apiVersion: string = "v1";
 
 // Routes
-app.use(`/${apiVersion}/auth`, authRoutes);
-app.use(`/${apiVersion}/user`, UserRoutes);
+app.use(`/${apiVersion}/default`, defaultRoutes);
 
 // 404 Handler
 app.use((_req: Request, _res: Response, next: NextFunction) => {
@@ -68,30 +67,25 @@ app.use((err: HttpError, _req: Request, res: Response, _next: NextFunction) => {
     message: err.message,
   });
 });
-
-export async function publishMessage(message:any) {
+async function consumeMessages() {
     const connection = await amqp.connect('amqp://localhost');
     const channel = await connection.createChannel();
     const queue = 'my_queue';
 
     await channel.assertQueue(queue, { durable: true });
-    channel.sendToQueue(queue, Buffer.from(message));
-    console.log(`Message sent: ${message}`);
+    console.log('Waiting for messages in %s', queue);
 
-    await channel.close();
-    await connection.close();
+    channel.consume(queue, (msg) => {
+        if (msg !== null) {
+            const messageContent = msg.content.toString();
+            console.log(`Message received: ${messageContent}`);
+            channel.ack(msg); // Acknowledge message processing
+        }
+    });
 }
-
-
-
-
-
-
-
-
-
+consumeMessages().catch(console.error);
 // Server Configs
 const PORT: number = Number(process.env.PORT) || 5000;
 app.listen(PORT, () => {
-  console.log(`USER MICROSERVICE IS RUNNING ON PORT ${PORT}`);
+  console.log(`🚀 @ http://localhost:${PORT}`);
 });
