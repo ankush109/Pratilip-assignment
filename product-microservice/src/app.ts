@@ -10,7 +10,7 @@ import favicon from "serve-favicon";
 import "./v1/config/env.config";
 
 import { defaultMiddleware } from "./v1/middlewares";
-import { defaultRoutes } from "./v1/routes";
+import { ProductRoute } from "./v1/routes";
 
 // RateLimitter
 const limiter = rateLimit({
@@ -52,7 +52,7 @@ app.all("/", (_req: Request, res: Response, _next: NextFunction) => {
 const apiVersion: string = "v1";
 
 // Routes
-app.use(`/${apiVersion}/default`, defaultRoutes);
+app.use(`/${apiVersion}/product`, ProductRoute);
 
 // 404 Handler
 app.use((_req: Request, _res: Response, next: NextFunction) => {
@@ -69,7 +69,7 @@ app.use((err: HttpError, _req: Request, res: Response, _next: NextFunction) => {
 });
 
 // Server Configs
-const PORT: number = Number(process.env.PORT) || 5000;
+const PORT: number = Number(process.env.PORT) || 6000;
 app.listen(PORT, () => {
   console.log(`PRODUCT MICROSERVICE IS RUNNING ON PORT ${PORT}`);
 });

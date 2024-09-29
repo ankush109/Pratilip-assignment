@@ -14,8 +14,10 @@ datasource db {
 }
 
 model Product {
-  id          String @id @default(cuid())
+  id          String   @id @default(cuid())
   name        String
   description String
   price       Int
+  stock       Int
+  createdAt   DateTime @default(now()) @db.Timestamp(6)
 }
