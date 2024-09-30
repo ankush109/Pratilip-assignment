@@ -43,4 +43,12 @@ export const registerController = {
       return next(createError.InternalServerError());
     }
   },
+  async getAllusers(req: Request, res: Response, next: NextFunction){
+  try{
+ const allusers = await prisma.user.findMany({})
+ res.json(customResponse(201,allusers))
+  }catch(err){
+    console.log(err)
+  }
+  }
 };

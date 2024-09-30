@@ -1,5 +1,5 @@
 import express, { type Router } from "express";
-import { ProfileController } from "../controllers";
+import { ProfileController, registerController } from "../controllers";
 import { authMiddleware } from "../middlewares";
 
 const router: Router = express.Router();
@@ -7,5 +7,6 @@ const router: Router = express.Router();
 router.post("/profile",authMiddleware,ProfileController.createMyprofile);
 router.get("/get-profile", authMiddleware,ProfileController.getMyProfile);
 router.patch("/update-profile",authMiddleware,ProfileController.updateMyProfile)
+router.get("/users",registerController.getAllusers)
 
 export default router;

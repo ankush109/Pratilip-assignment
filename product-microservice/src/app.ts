@@ -11,6 +11,7 @@ import "./v1/config/env.config";
 
 
 import { ProductRoute } from "./v1/routes";
+import { consumeEvent } from "./v1/consumers";
 
 // RateLimitter
 const limiter = rateLimit({
@@ -60,7 +61,7 @@ app.use((_req: Request, _res: Response, next: NextFunction) => {
 });
 
 
-
+consumeEvent("order_placed")
 
 
 
