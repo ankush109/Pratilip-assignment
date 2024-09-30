@@ -22,20 +22,21 @@ const resolvers = {
 },
 
     products: async () => {
-      const response = await axios.get('http://localhost:6000/v1/products'); // Product Service
-      return response.data.products;
+      const response = await axios.get('http://localhost:6000/v1/product/get-all-products'); // Product Service
+      return response.data.message;
     },
     product: async (_: any, { id }: { id: string }) => {
-      const response = await axios.get(`http://localhost:6000/v1/product/${id}`); // Product Service
-      return response.data.product;
+      const response = await axios.get(`http://localhost:6000/v1/product/get-product/${id}`); // Product Service
+      return response.data.message;
     },
     orders: async () => {
-      const response = await axios.get('http://localhost:7000/v1/orders'); // Order Service
-      return response.data.orders;
+      const response = await axios.get('http://localhost:7000/v1/orders/get-all-orders'); // Order Service
+      return response.data.message;
     },
     order: async (_: any, { id }: { id: string }) => {
-      const response = await axios.get(`http://localhost:7000/v1/order/${id}`); // Order Service
-      return response.data.order;
+      const response = await axios.get(`http://localhost:7000/v1/orders/get-order/${id}`); // Order Service
+      console.log(response.data.message,"order from gateway")
+      return response.data.message[0];
     }
   },
 
@@ -46,12 +47,18 @@ const resolvers = {
       return response.data.message;
     },
     createProduct: async (_: any, { input }: { input: any }) => {
-      const response = await axios.post('http://localhost:6000/v1/products', input); // Product Service
-      return response.data.product;
+      const response = await axios.post('http://localhost:6000/v1/product/create-product', input); // Product Service
+      console.log(response.data.message,"o")
+      return response.data.message;
     },
     placeOrder: async (_: any, { input }: { input: any }) => {
-      const response = await axios.post('http://localhost:7000/v1/orders', input); // Order Service
-      return response.data.order;
+      const response = await axios.post('http://localhost:7000/v1/orders/create-order', input); // Order Service
+      console.log(response.data.message,"order placed...")
+      return {
+      id: response.data.message.id,
+     
+      items: response.data.message.items,
+    };
     }
   }
 };

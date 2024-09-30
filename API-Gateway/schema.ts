@@ -16,16 +16,17 @@ const typeDefs = gql`
     name: String!
     price: Float!
     stock: Int!
+    description:String!
   }
 
   # Order type definition
-  type Order {
-    id: ID!
-    userId: ID!
-    total: Float!
-    status: String!
-    items: [OrderItem!]!
-  }
+type Order {
+  id: ID!
+  userId: ID!
+  items: [OrderItem!]!  # Make sure this matches how you return the items in the resolver
+  total: Float!
+  status: String!
+}
 
   # OrderItem type definition (nested inside Order)
   type OrderItem {
@@ -65,6 +66,7 @@ const typeDefs = gql`
   input ProductInput {
     name: String!
     price: Float!
+    description:String!
     stock: Int!
   }
 

@@ -85,7 +85,7 @@ const OrderController = {
       await publishEvent(message, "ORDER_PLACED");
 
       // Send the success response
-      res.json(customResponse(200, "Order has been placed successfully!"));
+      res.json(customResponse(200, order));
     } catch (err) {
       console.error(err);
       if (!res.headersSent) {
@@ -134,6 +134,40 @@ const OrderController = {
       console.log(err, "erre//");
     }
   },
+  async getAllorders(   req: Request,
+    res: Response,
+    next: NextFunction){
+  try{
+   const allorders = await prisma.order.findMany({
+    include:{
+      items:true
+    }
+   })
+   res.json(customResponse(200,allorders))
+  }catch(err){
+   
+  }
+  },
+   async getAllorderById(   req: Request,
+    res: Response,
+    next: NextFunction){
+  try{
+    const {id}=req.params
+   const order = await prisma.order.findMany({
+    where:{
+      id:id
+    },
+     include:{
+      items:true
+       
+    }
+   })
+   console.log(order,"order")
+   res.json(customResponse(200,order))
+  }catch(err){
+   
+  }
+  }
 };
 
 export default OrderController;

@@ -37,7 +37,7 @@ const ProductController = {
         description:product.description
       }
       await publishEvent(message,"product_created")
-      res.json(customResponse(200, "Product Created Successfully!"));
+      res.json(customResponse(200, product));
       
     } catch (err) {
       next(createError.InternalServerError());
@@ -123,6 +123,23 @@ const ProductController = {
         }
       });
       res.json(customResponse(200, "product deleted successfully!"));
+    } catch (err) {
+      next(createError.InternalServerError());
+    }
+  },
+   async getProductById(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+     const {id} = req.params
+     const product =   await prisma.product.findFirstOrThrow({
+        where:{
+          id:id
+        }
+      });
+      res.json(customResponse(200, product));
     } catch (err) {
       next(createError.InternalServerError());
     }
