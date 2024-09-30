@@ -17,8 +17,8 @@ COPY . .
 # You can alternatively pass them during runtime with `docker run -e "VAR_NAME=value"`
 # For now, we will use a placeholder.
 ENV PORT=7000
-ENV DATABASE_URL="postgresql://postgres:root@host.docker.internal:5432/order_db?schema=public"
 
+ENV DATABASE_URL="postgresql://postgres:root@host.docker.internal:5432/order_db?schema=public"
 RUN npx prisma migrate dev 
 # Step 7: Expose the port on which your Node.js server will run
 EXPOSE 7000

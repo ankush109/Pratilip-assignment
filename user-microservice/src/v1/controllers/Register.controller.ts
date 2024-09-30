@@ -31,7 +31,7 @@ export const registerController = {
         email:user.email
       }
        await publishEvent(message,"user_registered");
-      res.status(201).json(customResponse(201, "User Registered Successfully"));
+      res.status(201).json(customResponse(201, user));
     } catch (err) {
       console.log(err,"err")
       if (err instanceof ZodError) {

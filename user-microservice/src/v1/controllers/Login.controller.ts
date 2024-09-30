@@ -7,7 +7,11 @@ import ms from "ms";
 import JWTService from "../service/JWTService";
 import { customResponse } from "../utils/Response.util";
 import { z, ZodError } from "zod";
+import { JwtPayload } from "jsonwebtoken";
 const prisma = new PrismaClient();
+interface AuthRequestBody {
+  token: string;
+}
 export const loginController = {
   async Login(
     req: Request<{}, {}, loginBodyType>,
@@ -64,7 +68,7 @@ export const loginController = {
       });
       res.json(customResponse(200, { accessToken, refreshToken }));
     } catch (err) {
-      console.log(err,"err")
+      console.log(err, "err");
       if (err instanceof ZodError) {
         return next({
           status: createError.InternalServerError().status,
@@ -162,6 +166,63 @@ export const loginController = {
         });
       }
       return next(createError.InternalServerError());
+    }
+  },
+  async validateJWTToken(
+    req: Request<{}, {}, AuthRequestBody>,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      // Extract the token from request headers or body
+      const { token } = req.body;
+      if (!token) {
+        res.status(400).json({ message: "Token not provided" });
+      }
+
+      // Remove "Bearer " part if present
+      const serializedToken = token.startsWith("Bearer ")
+        ? token.split(" ")[1]
+        : token;
+
+      console.log(serializedToken, "token from headers...");
+
+      // Decode the token to get user information
+      const decodedUser = JWTService.decode(serializedToken) as JwtPayload;
+      const userId = decodedUser?.id;
+
+      if (!userId) {
+        res.json(
+          customResponse(401, {
+            success: false,
+            message: "invalid token",
+          })
+        );
+      }
+
+      // Fetch user from the database
+      const user = await prisma.user.findUniqueOrThrow({
+        where: {
+          id: userId,
+        },
+      });
+
+      // Verify the token
+      JWTService.verify(
+        serializedToken,
+        userId,
+        process.env.USER_ACCESS_SECRET + user.password!
+      ) as { id: string };
+
+      res.json(
+        customResponse(201, {
+          success: true,
+          message: token,
+        })
+      );
+    } catch (err) {
+      console.error(err);
+      res.status(401).json({ success: false, message: "Unauthorized" });
     }
   },
 };

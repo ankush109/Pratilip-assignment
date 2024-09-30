@@ -8,9 +8,13 @@ import path from "path";
 import favicon from "serve-favicon";
 import amqp  from "amqplib"
 import "./v1/config/env.config";
-
+import client from "prom-client";
 import { authMiddleware } from "./v1/middlewares";
 import { authRoutes,UserRoutes } from "./v1/routes";
+
+import { monitoringMiddleware } from "./v1/metrics";
+import { requestCountMiddleware } from "./v1/metrics/requestCount";
+import { httpMicrosecond } from "./v1/metrics/activeRequests";
 
 // RateLimitter
 const limiter = rateLimit({
@@ -39,6 +43,9 @@ app.set("trust proxy", 1);
 app.use(limiter);
 app.use(cors(corsOption));
 app.use(express.json());
+//app.use(requestCountMiddleware)
+app.use(httpMicrosecond)
+app.use(monitoringMiddleware)
 app.use(express.urlencoded({ extended: false }));
 app.use(morgan("dev"));
 app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
@@ -54,6 +61,12 @@ const apiVersion: string = "v1";
 // Routes
 app.use(`/${apiVersion}/auth`, authRoutes);
 app.use(`/${apiVersion}/user`, UserRoutes);
+app.get("/metrics",async(req,res)=>{
+    const metrics = await client.register.metrics();
+    res.set('Content-Type', client.register.contentType);
+    res.end(metrics);
+})
+
 
 // 404 Handler
 app.use((_req: Request, _res: Response, next: NextFunction) => {

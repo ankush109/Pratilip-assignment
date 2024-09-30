@@ -21,7 +21,7 @@ const resolvers = {
             return response.data.message;
         }),
         user: (_1, _a) => __awaiter(void 0, [_1, _a], void 0, function* (_, { id }) {
-            const response = yield axios_1.default.get(`http://localhost:5000/v1/users/${id}`); // User Service
+            const response = yield axios_1.default.get(`http://localhost:5000/v1/user/users/${id}`); // User Service
             return response.data.user;
         }),
         products: () => __awaiter(void 0, void 0, void 0, function* () {
@@ -43,8 +43,9 @@ const resolvers = {
     },
     Mutation: {
         registerUser: (_1, _a) => __awaiter(void 0, [_1, _a], void 0, function* (_, { input }) {
-            const response = yield axios_1.default.post('http://localhost:5000/v1/users/register', input); // User Service
-            return response.data.user;
+            const response = yield axios_1.default.post('http://localhost:5000/v1/auth/register', input); // User Servicec
+            console.log(response.data.message, "register response");
+            return response.data.message;
         }),
         createProduct: (_1, _a) => __awaiter(void 0, [_1, _a], void 0, function* (_, { input }) {
             const response = yield axios_1.default.post('http://localhost:6000/v1/products', input); // Product Service

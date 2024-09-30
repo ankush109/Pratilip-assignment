@@ -91,5 +91,33 @@ export const ProfileController = {
       }
       return next(createError.InternalServerError());
     }
+  },async getUserDetails(req: any, res: Response, next: NextFunction) {
+    try {
+      const userId: any = req.user.id;
+      const userDetails = await prisma.user.findFirstOrThrow({
+        where:{
+          id:userId
+        },
+        include:{
+          profile:true,
+        }
+      
+      });
+     
+     
+      res
+        .status(201)
+        .json(customResponse(201, userDetails));
+
+       
+    } catch (err) {
+      if (err instanceof ZodError) {
+        return next({
+          status: createError.InternalServerError().status,
+          message: err.issues,
+        });
+      }
+      return next(createError.InternalServerError());
+    }
   },
 };
