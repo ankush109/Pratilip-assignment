@@ -1,6 +1,4 @@
-import { PrismaClient } from "@prisma/client";
-import { type NextFunction, type Request, type Response } from "express";
-import createError from "http-errors";
+import { PrismaClient } from "@prisma/client";import { type NextFunction, type Request, type Response } from "express";
 import { customResponse } from "../../utils/Response.util";
 import axios from "axios";
 import { publishEvent } from "../producers";
@@ -54,17 +52,56 @@ const OrderController = {
         },
       });
       console.log(productData, "products data....");
-      const message ={
-        orderId:order.id,
-        items:order.items,
-        status:order.status,
-        totalPrice:order.total
-      }
-      await publishEvent(message,"order_placed")
+      const message = {
+        orderId: order.id,
+        items: order.items,
+        status: order.status,
+        totalPrice: order.total,
+      };
+      await publishEvent(message, "order_placed");
       res.json(customResponse(200, "Order has been placed successfully!"));
     } catch (err) {
       console.error(err);
       res.status(500).json({ error: "Failed to create order" });
+    }
+  },
+  async orderStatus(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const { id } = req.params;
+      const order = await prisma.order.findFirstOrThrow({
+        where: {
+          id: id,
+        },
+      });
+      if (!order) {
+        res.json(customResponse(201, "no order found with given Id"));
+      }
+
+     const orders =  await prisma.order.update({
+        where: {
+          id: id,
+        },
+        data: {
+          status: "SHIPPED",
+        },
+        include:{
+          items:true
+        }
+      });
+        const message = {
+        orderId: orders.id,
+        items: orders.items,
+        status: orders.status,
+        totalPrice: orders.total,
+      };
+      await publishEvent(message, "order_shippeed");
+      res.json(customResponse(201,"Order status has been updated .."))
+    } catch (err) {
+      console.log(err, "erre//");
     }
   },
 };
