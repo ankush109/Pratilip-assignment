@@ -69,26 +69,21 @@ app.use((err: HttpError, _req: Request, res: Response, _next: NextFunction) => {
   });
 });
 
-export async function publishMessage(message:any) {
+export async function publishEvent(event: any, eventType: string) {
     const connection = await amqp.connect('amqp://localhost');
     const channel = await connection.createChannel();
-    const queue = 'my_queue';
+    
+    const exchange = 'events_exchange'; // Define an exchange
+    const routingKey = eventType; // Use the event type as the routing key
 
-    await channel.assertQueue(queue, { durable: true });
-    channel.sendToQueue(queue, Buffer.from(message));
-    console.log(`Message sent: ${message}`);
+    await channel.assertExchange(exchange, 'direct', { durable: true });
+
+    channel.publish(exchange, routingKey, Buffer.from(JSON.stringify(event)));
+    console.log(`Event published: ${eventType}`, event);
 
     await channel.close();
     await connection.close();
 }
-
-
-
-
-
-
-
-
 
 // Server Configs
 const PORT: number = Number(process.env.PORT) || 5000;

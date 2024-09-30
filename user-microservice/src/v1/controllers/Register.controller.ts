@@ -6,6 +6,7 @@ import bcrypt from "bcrypt";
 
 import { customResponse } from "../utils/Response.util";
 import { z, ZodError } from "zod";
+import { publishEvent } from "../../app";
 const prisma = new PrismaClient();
 type registerRequestBodyType = z.infer<typeof registerSchema>;
 export const registerController = {
@@ -22,7 +23,14 @@ export const registerController = {
         email:resp.email,
         password: hashedPassword,
       };
-      await prisma.user.create({ data });
+     
+     const user =  await prisma.user.create({ data });
+      const message = {
+        name:user.name,
+        id:user.id,
+        email:user.email
+      }
+       await publishEvent(message,"user_registered");
       res.status(201).json(customResponse(201, "User Registered Successfully"));
     } catch (err) {
       console.log(err,"err")

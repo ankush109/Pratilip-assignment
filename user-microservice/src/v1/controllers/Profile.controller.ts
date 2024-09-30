@@ -4,6 +4,7 @@ import createError from "http-errors";
 
 import { customResponse } from "../utils/Response.util";
 import { ZodError } from "zod";
+import { publishEvent } from "../../app";
 const prisma = new PrismaClient();
 
 export const ProfileController = {
@@ -22,6 +23,8 @@ export const ProfileController = {
       res
         .status(201)
         .json(customResponse(201, "profile created successfully!!"));
+
+       
     } catch (err) {
       if (err instanceof ZodError) {
         return next({
@@ -41,6 +44,44 @@ export const ProfileController = {
         },
       });
       res.status(201).json(customResponse(201, profile));
+    } catch (err) {
+      if (err instanceof ZodError) {
+        return next({
+          status: createError.InternalServerError().status,
+          message: err.issues,
+        });
+      }
+      return next(createError.InternalServerError());
+    }
+  },
+  async updateMyProfile(req: any, res: Response, next: NextFunction) {
+    try {
+      const userId: any = req.user.id;
+      const { bio } = req.body;
+      console.log(userId, "userid");
+      const profile = await prisma.profile.update({
+        where:{
+          userId:userId
+        },
+        data: {
+          userId: userId,
+          bio: bio,
+        },
+        select:{
+          user:true
+        }
+      });
+      const message = {
+       name:profile.user.name,
+       userId:profile.user.id,
+       email:profile.user.email
+      }
+      await publishEvent(message,"user_profile_updated");
+      res
+        .status(201)
+        .json(customResponse(201, "profile updated successfully!!"));
+
+       
     } catch (err) {
       if (err instanceof ZodError) {
         return next({

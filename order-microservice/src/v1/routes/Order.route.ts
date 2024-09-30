@@ -1,8 +1,8 @@
 import express, { type Router } from "express";
-import { defaultController } from "../controllers";
+import { OrderController } from "../controllers";
 
 const router: Router = express.Router();
 
-router.get("/", defaultController.greet);
+router.post("/create-order", OrderController.createOrder);
 
 export default router;

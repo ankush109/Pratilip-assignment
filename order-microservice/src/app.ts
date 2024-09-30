@@ -6,11 +6,12 @@ import createError, { type HttpError } from "http-errors";
 import morgan from "morgan";
 import path from "path";
 import favicon from "serve-favicon";
-import amqp  from "amqplib"
+
 import "./v1/config/env.config";
 
-import { defaultMiddleware } from "./v1/middlewares";
-import { defaultRoutes } from "./v1/routes";
+
+import { OrderRoute } from "./v1/routes";
+import { consumeEvent } from "./v1/consumers";
 
 // RateLimitter
 const limiter = rateLimit({
@@ -42,7 +43,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(morgan("dev"));
 app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
-app.use(defaultMiddleware);
+//app.use(defaultMiddleware);
 
 // Welcome Route
 app.all("/", (_req: Request, res: Response, _next: NextFunction) => {
@@ -52,7 +53,7 @@ app.all("/", (_req: Request, res: Response, _next: NextFunction) => {
 const apiVersion: string = "v1";
 
 // Routes
-app.use(`/${apiVersion}/default`, defaultRoutes);
+app.use(`/${apiVersion}/orders`, OrderRoute);
 
 // 404 Handler
 app.use((_req: Request, _res: Response, next: NextFunction) => {
@@ -67,25 +68,11 @@ app.use((err: HttpError, _req: Request, res: Response, _next: NextFunction) => {
     message: err.message,
   });
 });
-async function consumeMessages() {
-    const connection = await amqp.connect('amqp://localhost');
-    const channel = await connection.createChannel();
-    const queue = 'my_queue';
 
-    await channel.assertQueue(queue, { durable: true });
-    console.log('Waiting for messages in %s', queue);
-
-    channel.consume(queue, (msg) => {
-        if (msg !== null) {
-            const messageContent = msg.content.toString();
-            console.log(`Message received: ${messageContent}`);
-            channel.ack(msg); // Acknowledge message processing
-        }
-    });
-}
-consumeMessages().catch(console.error);
+consumeEvent('user_registered');
+consumeEvent("user_profile_updated")
 // Server Configs
 const PORT: number = Number(process.env.PORT) || 5000;
 app.listen(PORT, () => {
-  console.log(`🚀 @ http://localhost:${PORT}`);
+  console.log(`🚀ORDER MICROSERVICE IS RUNNING ON ${PORT}`);
 });

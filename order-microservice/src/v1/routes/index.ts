@@ -1,1 +1,1 @@
-export { default as defaultRoutes } from "./Default.route";
+export { default as OrderRoute } from "./Order.route";

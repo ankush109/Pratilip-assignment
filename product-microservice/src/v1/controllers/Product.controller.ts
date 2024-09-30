@@ -2,7 +2,9 @@ import { PrismaClient } from "@prisma/client";
 import { type NextFunction, type Request, type Response } from "express";
 import createError from "http-errors";
 import { customResponse } from "../../utils/Response.util";
+
 import { z } from "zod";
+import { publishEvent } from "../publishers";
 const ProductSchema = z.object({
   name: z.string(),
   description: z.string(),
@@ -19,7 +21,7 @@ const ProductController = {
     try {
       //  const {name,description,price} =req.body;
       const resp = await ProductSchema.parseAsync(req.body);
-      await prisma.product.create({
+    const product =   await prisma.product.create({
         data: {
           name: resp.name,
           description: resp.description,
@@ -27,7 +29,16 @@ const ProductController = {
           stock:resp.stock
         },
       });
+      const message= {
+        name:product.name,
+        id:product.id,
+        price:product.price,
+        stoc:product.stock,
+        description:product.description
+      }
+      await publishEvent(message,"product_created")
       res.json(customResponse(200, "Product Created Successfully!"));
+      
     } catch (err) {
       next(createError.InternalServerError());
     }
@@ -41,7 +52,7 @@ const ProductController = {
       //  const {name,description,price} =req.body;
       const {id} =req.params
       const resp = await ProductSchema.parseAsync(req.body);
-      await prisma.product.update({
+      const product = await prisma.product.update({
         where:{
           id:id
         },
@@ -53,6 +64,14 @@ const ProductController = {
 
         }
       });
+      const message= {
+        name:product.name,
+        id:product.id,
+        price:product.price,
+        stoc:product.stock,
+        description:product.description
+      }
+      await publishEvent(message,"product_updated")
       res.json(customResponse(200, "Product Updated Successfully!"));
     } catch (err) {
       next(createError.InternalServerError());

@@ -6,10 +6,10 @@ import createError, { type HttpError } from "http-errors";
 import morgan from "morgan";
 import path from "path";
 import favicon from "serve-favicon";
-
+import amqp  from "amqplib"
 import "./v1/config/env.config";
 
-import { defaultMiddleware } from "./v1/middlewares";
+
 import { ProductRoute } from "./v1/routes";
 
 // RateLimitter
@@ -42,7 +42,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(morgan("dev"));
 app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
-app.use(defaultMiddleware);
+
 
 // Welcome Route
 app.all("/", (_req: Request, res: Response, _next: NextFunction) => {
@@ -58,6 +58,13 @@ app.use(`/${apiVersion}/product`, ProductRoute);
 app.use((_req: Request, _res: Response, next: NextFunction) => {
   next(createError.NotFound());
 });
+
+
+
+
+
+
+
 
 // Error Handler
 app.use((err: HttpError, _req: Request, res: Response, _next: NextFunction) => {
