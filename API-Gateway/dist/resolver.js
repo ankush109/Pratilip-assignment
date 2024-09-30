@@ -15,14 +15,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = __importDefault(require("axios"));
 const resolvers = {
     Query: {
-        users: () => __awaiter(void 0, void 0, void 0, function* () {
-            const response = yield axios_1.default.get('http://localhost:5000/v1/user/users'); // User Service
-            console.log(response, "response from API GATEWAY...");
-            return response.data.message;
-        }),
+        // users: withAuth(async () => {
+        //   const response = await axios.get('http://localhost:5000/v1/user/users'); // User Service
+        //   console.log(response,"response from API GATEWAY...")
+        //   return response.data.message;
+        // }),
         user: (_1, _a) => __awaiter(void 0, [_1, _a], void 0, function* (_, { id }) {
-            const response = yield axios_1.default.get(`http://localhost:5000/v1/user/users/${id}`); // User Service
-            return response.data.user;
+            try {
+                const response = yield axios_1.default.get(`http://localhost:5000/v1/user/single-user/${id}`); // User Service
+                console.log(response.data.message, "single-id");
+                return response.data.message; // Return the user object instead of message
+            }
+            catch (error) {
+                // Log only the message and any other useful information
+                console.error("Error fetching user:", error);
+            }
         }),
         products: () => __awaiter(void 0, void 0, void 0, function* () {
             const response = yield axios_1.default.get('http://localhost:6000/v1/products'); // Product Service

@@ -1,21 +1,20 @@
 import axios from "axios";
 
-export const validateToken = async (req:any, res:any, next:any) => {
+export const validateToken = async (req:any) => {
+  console.log("Validating token");
   const authHeader = req.headers.authorization;
   if (!authHeader) {
-    return res.status(401).json({ message: 'Authorization token required' });
+    throw new Error('Authorization token required');
   }
-
-  const token = authHeader.split(' ')[1]; // Extract the token
-
+  const token = authHeader; 
+  console.log(token, "GraphQL token");
   try {
-    // Send the token to the User Microservice for validation
-    const response = await axios.post('http://localhost:5000/v1/auth/validate', { token });
-    req.user = response.data.user; // Attach user info to the request (if needed)
-
-    next(); // Proceed to the next middleware or route handler
+    
+    const response = await axios.post('http://localhost:5000/v1/user/validate-token', { token });
+    req.user = response.data.user;
+   
   } catch (error) {
     console.error('Token validation error:', error);
-    return res.status(401).json({ message: 'Invalid or expired token' });
+    throw new Error('Invalid or expired token');
   }
 };

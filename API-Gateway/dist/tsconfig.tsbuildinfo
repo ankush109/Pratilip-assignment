@@ -1,1 +1,1 @@
-{"root":["../resolver.ts","../schema.ts","../server.ts"],"version":"5.6.2"}
+{"root":["../resolver.ts","../schema.ts","../server.ts","../middlewares/index.ts","../middlewares/withauth.ts"],"version":"5.6.2"}

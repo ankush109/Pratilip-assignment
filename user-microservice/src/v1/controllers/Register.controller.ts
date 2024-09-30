@@ -50,5 +50,15 @@ export const registerController = {
   }catch(err){
     console.log(err)
   }
+  },
+  async getUserById(req: Request, res: Response, next: NextFunction){
+      try{
+  const {id} = req.params;
+   const user = await prisma.user.findFirst({where:{id:id}})
+   console.log(id,"iod")
+   res.json(customResponse(201,user))
+      }catch(err){
+ console.log(err,"err")
+      }
   }
 };

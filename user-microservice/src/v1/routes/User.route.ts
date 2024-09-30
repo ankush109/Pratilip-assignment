@@ -10,5 +10,5 @@ router.patch("/update-profile",authMiddleware,ProfileController.updateMyProfile)
 router.get("/users",registerController.getAllusers)
 router.get("/get-my-details",authMiddleware,ProfileController.getUserDetails)
 router.post("/validate-token",loginController.validateJWTToken)
-
+router.get("/single-user/:id",registerController.getUserById)
 export default router;

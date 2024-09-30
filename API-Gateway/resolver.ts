@@ -1,17 +1,26 @@
 import axios from "axios";
+import withAuth from "./middlewares/withAuth";
 
 
 const resolvers = {
   Query: {
-    users: async () => {
+    users: withAuth(async () => {
       const response = await axios.get('http://localhost:5000/v1/user/users'); // User Service
       console.log(response,"response from API GATEWAY...")
       return response.data.message;
-    },
-    user: async (_: any, { id }: { id: string }) => {
-      const response = await axios.get(`http://localhost:5000/v1/user/users/${id}`); // User Service
-      return response.data.user;
-    },
+    }),
+  user: async (_: any, { id }: { id: string }) => {
+  try {
+    const response = await axios.get(`http://localhost:5000/v1/user/single-user/${id}`); // User Service
+    console.log(response.data.message, "single-id");
+    return response.data.message; // Return the user object instead of message
+  } catch (error:any) {
+    // Log only the message and any other useful information
+    console.error("Error fetching user:", error)
+   
+  }
+},
+
     products: async () => {
       const response = await axios.get('http://localhost:6000/v1/products'); // Product Service
       return response.data.products;
