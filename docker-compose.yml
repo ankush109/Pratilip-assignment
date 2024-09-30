@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  userdb:
+    image: postgres:9.6
+    container_name: userdb
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: users
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  user-service:
+    build: ./user-microservice
+    ports:
+      - "5000:5000" 
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@userdb:5432/users
+      RABBITMQ_URL: amqp://rabbitmq:5672
+    depends_on:
+      userdb:
+        condition: service_healthy
+    command: >
+      sh -c "npx prisma migrate deploy && npm run dev"  # Apply migrations before running the app
+    env_file:
+      - ./user-microservice/.env
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+volumes:
+  postgres-data:
