@@ -16,6 +16,7 @@ exports.resolvers = void 0;
 const withAuth_1 = __importDefault(require("./middlewares/withAuth"));
 const orderService_1 = __importDefault(require("./services/orderService"));
 const productService_1 = __importDefault(require("./services/productService"));
+const redisClient_1 = require("./services/redisClient");
 const userService_1 = __importDefault(require("./services/userService"));
 exports.resolvers = {
     Query: {
@@ -26,7 +27,23 @@ exports.resolvers = {
             return userService_1.default.getUserById(id);
         }),
         products: () => __awaiter(void 0, void 0, void 0, function* () {
-            return productService_1.default.getAllProducts();
+            const cacheKey = "product_list";
+            try {
+                const cachedProducts = yield redisClient_1.redisClient.get(cacheKey);
+                if (cachedProducts) {
+                    console.log("Returning cached products");
+                    console.log("in cache");
+                    return JSON.parse(cachedProducts);
+                }
+                const products = yield productService_1.default.getAllProducts();
+                yield redisClient_1.redisClient.set(cacheKey, JSON.stringify(products), 'EX', 600); // Cache for 10 minutes
+                console.log('Products cached');
+                return products;
+            }
+            catch (err) {
+                console.error('Error accessing Redis cache:', err);
+                return yield productService_1.default.getAllProducts(); // Fallback to service call
+            }
         }),
         product: (_1, _a) => __awaiter(void 0, [_1, _a], void 0, function* (_, { id }) {
             return productService_1.default.getProductById(id);
@@ -36,7 +53,7 @@ exports.resolvers = {
         }),
         order: (_1, _a) => __awaiter(void 0, [_1, _a], void 0, function* (_, { id }) {
             return orderService_1.default.getOrderById(id);
-        })
+        }),
     },
     Mutation: {
         registerUser: (_1, _a) => __awaiter(void 0, [_1, _a], void 0, function* (_, { input }) {
@@ -50,6 +67,6 @@ exports.resolvers = {
         })),
         loginUser: (_1, _a) => __awaiter(void 0, [_1, _a], void 0, function* (_, { input }) {
             return userService_1.default.loginUser(input);
-        })
-    }
+        }),
+    },
 };

@@ -97,10 +97,10 @@ services:
       sh -c "npx prisma migrate deploy && npm run dev"  # Apply migrations before running the app
     env_file:
       - ./product-microservice/.env
-  api-gateway-service:
-    build: ./API-gateway
-    ports:
-      - "4000:4000"
+  # api-gateway-service:
+  #   build: ./API-gateway
+  #   ports:
+  #     - "4000:4000"
       
 
   rabbitmq:
