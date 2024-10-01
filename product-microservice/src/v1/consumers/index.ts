@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import amqp from "amqplib";
 const prisma = new PrismaClient();
 export async function consumeEvent(eventType: string) {
-  const connection = await amqp.connect("amqp://localhost");
+  const connection = await amqp.connect("amqp://guest:guest@rabbitmq:5672");
   const channel = await connection.createChannel();
   const exchange = "events";
 
