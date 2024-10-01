@@ -16,17 +16,17 @@ const typeDefs = (0, apollo_server_1.gql) `
     name: String!
     price: Float!
     stock: Int!
-    description: String!
+    description:String!
   }
 
   # Order type definition
-  type Order {
-    id: ID!
-    userId: ID!
-    items: [OrderItem!]! # Make sure this matches how you return the items in the resolver
-    total: Float!
-    status: String!
-  }
+type Order {
+  id: ID!
+  userId: ID!
+  items: [OrderItem!]!  # Make sure this matches how you return the items in the resolver
+  total: Float!
+  status: String!
+}
 
   # OrderItem type definition (nested inside Order)
   type OrderItem {
@@ -66,7 +66,7 @@ const typeDefs = (0, apollo_server_1.gql) `
   input ProductInput {
     name: String!
     price: Float!
-    description: String!
+    description:String!
     stock: Int!
   }
   input LoginInput {
@@ -90,10 +90,10 @@ const typeDefs = (0, apollo_server_1.gql) `
   type Mutation {
     # Register a new user
     registerUser(input: RegisterInput!): User!
-
+    
     # Create a new product (admin-only)
     createProduct(input: ProductInput!): Product!
-    loginUser(input: LoginInput!): AuthTokens!
+      loginUser(input: LoginInput!): AuthTokens!
     # Place a new order
     placeOrder(input: OrderInput!): Order!
   }

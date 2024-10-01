@@ -13,9 +13,8 @@ const OrderController = {
     try {
       const { userId, items } = req.body;
 
+      console.log(items,"items")
       
-      const totalPrice = items.reduce((acc, item) => acc + item.price, 0);
-      console.log(totalPrice, "totalPrice...");
 
       let total = 0;
 

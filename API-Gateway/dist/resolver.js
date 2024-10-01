@@ -19,7 +19,7 @@ const productService_1 = __importDefault(require("./services/productService"));
 const userService_1 = __importDefault(require("./services/userService"));
 exports.resolvers = {
     Query: {
-        users: (0, withAuth_1.default)(() => __awaiter(void 0, void 0, void 0, function* () {
+        users: (0, withAuth_1.default)((_, args, context) => __awaiter(void 0, void 0, void 0, function* () {
             return userService_1.default.getAllUsers();
         })),
         user: (_1, _a) => __awaiter(void 0, [_1, _a], void 0, function* (_, { id }) {
@@ -45,9 +45,9 @@ exports.resolvers = {
         createProduct: (_1, _a) => __awaiter(void 0, [_1, _a], void 0, function* (_, { input }) {
             return productService_1.default.createProduct(input);
         }),
-        placeOrder: (_1, _a) => __awaiter(void 0, [_1, _a], void 0, function* (_, { input }) {
+        placeOrder: (0, withAuth_1.default)((_1, _a) => __awaiter(void 0, [_1, _a], void 0, function* (_, { input }) {
             return orderService_1.default.placeOrder(input);
-        }),
+        })),
         loginUser: (_1, _a) => __awaiter(void 0, [_1, _a], void 0, function* (_, { input }) {
             return userService_1.default.loginUser(input);
         })

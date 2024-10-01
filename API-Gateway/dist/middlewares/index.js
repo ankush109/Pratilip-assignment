@@ -20,14 +20,14 @@ const validateToken = (req) => __awaiter(void 0, void 0, void 0, function* () {
     if (!authHeader) {
         throw new Error('Authorization token required');
     }
-    const token = authHeader;
+    const token = authHeader.split(" ")[1];
     console.log(token, "GraphQL token");
     try {
         const response = yield axios_1.default.post('http://localhost:5000/v1/user/validate-token', { token });
-        req.user = response.data.user;
+        req.userId = response.data.message.message.user.id;
+        console.log(response.data.message.message.user.id, "reposnse");
     }
     catch (error) {
-        console.error('Token validation error:', error);
         throw new Error('Invalid or expired token');
     }
 });

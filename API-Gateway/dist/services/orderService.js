@@ -31,6 +31,7 @@ const OrderService = {
     // Place a new order ->
     placeOrder(input) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log(input, "ionput from order creation..");
             const response = yield axios_1.default.post('http://localhost:7000/v1/orders/create-order', input);
             return {
                 id: response.data.message.id,

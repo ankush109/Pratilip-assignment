@@ -217,7 +217,10 @@ export const loginController = {
       res.json(
         customResponse(201, {
           success: true,
-          message: token,
+          message: {
+            token:token,
+            user:user
+          },
         })
       );
     } catch (err) {

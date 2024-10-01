@@ -15,7 +15,9 @@ const OrderService = {
 
   // Place a new order ->
   async placeOrder(input: any) {
+    console.log(input,"ionput from order creation..")
     const response = await axios.post('http://localhost:7000/v1/orders/create-order', input);
+   
     return {
       id: response.data.message.id,
       items: response.data.message.items,

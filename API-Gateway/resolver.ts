@@ -7,7 +7,7 @@ import UserService from './services/userService';
 
 export const resolvers = {
   Query: {
-    users: withAuth(async () => {
+    users: withAuth(async (_:any, args:any, context:any) => {
       return UserService.getAllUsers();
     }),
     user: async (_: any, { id }: { id: string }) => {
@@ -34,9 +34,12 @@ export const resolvers = {
     createProduct: async (_: any, { input }: { input: any }) => {
       return ProductService.createProduct(input);
     },
-    placeOrder: async (_: any, { input }: { input: any }) => {
+    placeOrder:  withAuth(
+      async (_: any, { input }: { input: any }) => {
+   
       return OrderService.placeOrder(input);
-    },
+    }
+    ),
     loginUser:async(_:any,{input}:{input:any})=>{
       return UserService.loginUser(input)
     }
