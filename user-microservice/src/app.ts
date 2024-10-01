@@ -95,7 +95,7 @@ app.use((err: HttpError, _req: Request, res: Response, _next: NextFunction) => {
 });
 
 export async function publishEvent(event: any, eventType: string) {
-    const connection = await amqp.connect('amqp://localhost');
+    const connection = await amqp.connect('amqp://guest:guest@rabbitmq:5672');
     const channel = await connection.createChannel();
     
     const exchange = 'events_exchange'; // Define an exchange

@@ -14,7 +14,7 @@ const OrderController = {
       const { userId, items } = req.body;
 
       console.log(items,"items")
-      const response  = await axios.get(`http://localhost:5000/v1/user/getUserById/${userId}`)
+      const response  = await axios.get(`http://user-service:5000/v1/user/getUserById/${userId}`)
        const user = response.data.message.profile
       console.log(user,"user... ")
       let total = 0;
@@ -23,7 +23,7 @@ const OrderController = {
       const productData = await Promise.all(
         items.map(async (item) => {
           const productResponse = await axios.get(
-            `http://localhost:6000/v1/product/get-product/${item?.productId}`
+            `http://product-service:6000/v1/product/get-product/${item?.productId}`
           );
           const product = productResponse.data.message;
 

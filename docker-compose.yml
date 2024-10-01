@@ -64,6 +64,7 @@ services:
     depends_on:
       userdb:
         condition: service_healthy
+    
     command: >
       sh -c "npx prisma migrate deploy && npm run dev"  # Apply migrations before running the app
     env_file:
@@ -77,35 +78,39 @@ services:
       DATABASE_URL: postgresql://postgres:postgres@orderdb:5432/orders
       RABBITMQ_URL: amqp://rabbitmq:5672
     depends_on:
-      orderdb:
-         condition: service_healthy
       rabbitmq:
-        condition: service_started
+        condition: service_healthy
+      orderdb:
+        condition: service_healthy
+  
     command: >
       sh -c "npx prisma migrate deploy && npm run dev"  # Apply migrations before running the app
     env_file:
       - ./order-microservice/.env
+
   product-service:
     build: ./product-microservice
     ports:
       - "6000:6000" 
     environment:
-      DATABASE_URL: postgresql://postgres:postgres@orderdb:5432/prods
+      DATABASE_URL: postgresql://postgres:postgres@proddb:5432/prods
       RABBITMQ_URL: amqp://rabbitmq:5672
     depends_on:
-      orderdb:
-        condition: service_healthy
       rabbitmq:
-        condition: service_started
+        condition: service_healthy
+      proddb:
+        condition: service_healthy
+
     command: >
       sh -c "npx prisma migrate deploy && npm run dev"  # Apply migrations before running the app
     env_file:
       - ./product-microservice/.env
+
   api-gateway-service:
     build: ./API-gateway
     ports:
       - "4000:4000"
-      
+
   redis:
     image: redis:alpine
     container_name: redis_cache
@@ -113,8 +118,10 @@ services:
       - "6389:6379"
     volumes:
       - redis_data:/data     
+
   rabbitmq:
     image: rabbitmq:3-management
+    container_name: rabbitmq
     restart: always
     ports:
       - "5672:5672"
@@ -122,21 +129,24 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:  # Adding health check for RabbitMQ
+      test: ["CMD-SHELL", "rabbitmqctl await_startup"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   prom-server:
     image: prom/prometheus
     ports:
-      - 9090:9090
+      - "9090:9090"
     volumes:
       - ./prometheus.yml:/var/lib/prometheus/prometheus.yml
-  grafana:
-    image: grafana/grafana-oss  
-    container_name: grafana     
-    ports:
-      - "3000:3000"              
-    restart: unless-stopped  
 
 volumes:
   userdb-data:
   proddb-data:
   orderdb-data:
   redis_data:
+  rabbitmq_data:

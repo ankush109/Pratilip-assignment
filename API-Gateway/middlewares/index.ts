@@ -10,7 +10,7 @@ export const validateToken = async (req:any) => {
   console.log(token, "GraphQL token");
   try {
     
-    const response = await axios.post('http://localhost:5000/v1/user/validate-token', { token });
+    const response = await axios.post('http://user-service:5000/v1/user/validate-token', { token });
     req.userId = response.data.message.message.user.id;
     console.log(response.data.message.message.user.id,"reposnse")
     

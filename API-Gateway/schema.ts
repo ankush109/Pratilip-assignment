@@ -14,20 +14,26 @@ const typeDefs = gql`
     name: String!
     price: Float!
     stock: Int!
-    description:String!
+    description: String!
   }
 
   # Order type definition
-type Order {
-  id: ID!
-  userId: ID!
-  items: [OrderItem!]!  # Make sure this matches how you return the items in the resolver
-  total: Float!
-  status: String!
-}
+  type Order {
+    id: ID!
+    userId: ID!
+    items: [OrderItem!]!  # Make sure this matches how you return the items in the resolver
+    total: Float!
+    status: String!
+    shippingAddress: String!
+    pincode: String!
+    city: String!
+    country: String!
+    phoneNumber: String!
+  }
 
   # OrderItem type definition (nested inside Order)
   type OrderItem {
+    id: ID!                # Unique identifier for the order item
     productId: ID!
     quantity: Int!
     price: Float!
@@ -64,37 +70,45 @@ type Order {
   input ProductInput {
     name: String!
     price: Float!
-    description:String!
+    description: String!
     stock: Int!
   }
+
   input LoginInput {
     email: String!
     password: String!
   }
+
   input OrderInput {
     userId: ID!
     items: [OrderItemInput!]!
+
   }
 
   input OrderItemInput {
     productId: ID!
     quantity: Int!
   }
+
   type AuthTokens {
     accessToken: String!
     refreshToken: String!
   }
+
   # Mutations for creating or updating data
   type Mutation {
     # Register a new user
     registerUser(input: RegisterInput!): User!
-    
+
     # Create a new product (admin-only)
     createProduct(input: ProductInput!): Product!
-      loginUser(input: LoginInput!): AuthTokens!
+
+    # User login
+    loginUser(input: LoginInput!): AuthTokens!
+
     # Place a new order
     placeOrder(input: OrderInput!): Order!
   }
 `;
 
-export default typeDefs; 
+export default typeDefs;
