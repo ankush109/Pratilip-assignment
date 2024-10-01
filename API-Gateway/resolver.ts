@@ -1,66 +1,41 @@
-import axios from "axios";
-import withAuth from "./middlewares/withAuth";
 
+import withAuth from './middlewares/withAuth';
+import OrderService from './services/orderService';
 
-const resolvers = {
+import ProductService from './services/productService';
+import UserService from './services/userService';
+
+export const resolvers = {
   Query: {
     users: withAuth(async () => {
-      const response = await axios.get('http://localhost:5000/v1/user/users'); // User Service
-      console.log(response,"response from API GATEWAY...")
-      return response.data.message;
+      return UserService.getAllUsers();
     }),
-  user: async (_: any, { id }: { id: string }) => {
-  try {
-    const response = await axios.get(`http://localhost:5000/v1/user/single-user/${id}`); // User Service
-    console.log(response.data.message, "single-id");
-    return response.data.message; // Return the user object instead of message
-  } catch (error:any) {
-    // Log only the message and any other useful information
-    console.error("Error fetching user:", error)
-   
-  }
-},
-
+    user: async (_: any, { id }: { id: string }) => {
+      return UserService.getUserById(id);
+    },
     products: async () => {
-      const response = await axios.get('http://localhost:6000/v1/product/get-all-products'); // Product Service
-      return response.data.message;
+      return ProductService.getAllProducts();
     },
     product: async (_: any, { id }: { id: string }) => {
-      const response = await axios.get(`http://localhost:6000/v1/product/get-product/${id}`); // Product Service
-      return response.data.message;
+      return ProductService.getProductById(id);
     },
     orders: async () => {
-      const response = await axios.get('http://localhost:7000/v1/orders/get-all-orders'); // Order Service
-      return response.data.message;
+      return OrderService.getAllOrders();
     },
     order: async (_: any, { id }: { id: string }) => {
-      const response = await axios.get(`http://localhost:7000/v1/orders/get-order/${id}`); // Order Service
-      console.log(response.data.message,"order from gateway")
-      return response.data.message[0];
+      return OrderService.getOrderById(id);
     }
   },
 
   Mutation: {
     registerUser: async (_: any, { input }: { input: any }) => {
-      const response = await axios.post('http://localhost:5000/v1/auth/register', input); // User Servicec
-      console.log(response.data.message,"register response")
-      return response.data.message;
+      return UserService.registerUser(input);
     },
     createProduct: async (_: any, { input }: { input: any }) => {
-      const response = await axios.post('http://localhost:6000/v1/product/create-product', input); // Product Service
-      console.log(response.data.message,"o")
-      return response.data.message;
+      return ProductService.createProduct(input);
     },
     placeOrder: async (_: any, { input }: { input: any }) => {
-      const response = await axios.post('http://localhost:7000/v1/orders/create-order', input); // Order Service
-      console.log(response.data.message,"order placed...")
-      return {
-      id: response.data.message.id,
-     
-      items: response.data.message.items,
-    };
+      return OrderService.placeOrder(input);
     }
   }
 };
-
-export default resolvers;

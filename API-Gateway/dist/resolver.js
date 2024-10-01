@@ -12,63 +12,41 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const axios_1 = __importDefault(require("axios"));
+exports.resolvers = void 0;
 const withAuth_1 = __importDefault(require("./middlewares/withAuth"));
-const resolvers = {
+const orderService_1 = __importDefault(require("./services/orderService"));
+const productService_1 = __importDefault(require("./services/productService"));
+const userService_1 = __importDefault(require("./services/userService"));
+exports.resolvers = {
     Query: {
         users: (0, withAuth_1.default)(() => __awaiter(void 0, void 0, void 0, function* () {
-            const response = yield axios_1.default.get('http://localhost:5000/v1/user/users'); // User Service
-            console.log(response, "response from API GATEWAY...");
-            return response.data.message;
+            return userService_1.default.getAllUsers();
         })),
         user: (_1, _a) => __awaiter(void 0, [_1, _a], void 0, function* (_, { id }) {
-            try {
-                const response = yield axios_1.default.get(`http://localhost:5000/v1/user/single-user/${id}`); // User Service
-                console.log(response.data.message, "single-id");
-                return response.data.message; // Return the user object instead of message
-            }
-            catch (error) {
-                // Log only the message and any other useful information
-                console.error("Error fetching user:", error);
-            }
+            return userService_1.default.getUserById(id);
         }),
         products: () => __awaiter(void 0, void 0, void 0, function* () {
-            const response = yield axios_1.default.get('http://localhost:6000/v1/product/get-all-products'); // Product Service
-            return response.data.message;
+            return productService_1.default.getAllProducts();
         }),
         product: (_1, _a) => __awaiter(void 0, [_1, _a], void 0, function* (_, { id }) {
-            const response = yield axios_1.default.get(`http://localhost:6000/v1/product/get-product/${id}`); // Product Service
-            return response.data.message;
+            return productService_1.default.getProductById(id);
         }),
         orders: () => __awaiter(void 0, void 0, void 0, function* () {
-            const response = yield axios_1.default.get('http://localhost:7000/v1/orders/get-all-orders'); // Order Service
-            return response.data.message;
+            return orderService_1.default.getAllOrders();
         }),
         order: (_1, _a) => __awaiter(void 0, [_1, _a], void 0, function* (_, { id }) {
-            const response = yield axios_1.default.get(`http://localhost:7000/v1/orders/get-order/${id}`); // Order Service
-            console.log(response.data.message, "order from gateway");
-            return response.data.message[0];
+            return orderService_1.default.getOrderById(id);
         })
     },
     Mutation: {
         registerUser: (_1, _a) => __awaiter(void 0, [_1, _a], void 0, function* (_, { input }) {
-            const response = yield axios_1.default.post('http://localhost:5000/v1/auth/register', input); // User Servicec
-            console.log(response.data.message, "register response");
-            return response.data.message;
+            return userService_1.default.registerUser(input);
         }),
         createProduct: (_1, _a) => __awaiter(void 0, [_1, _a], void 0, function* (_, { input }) {
-            const response = yield axios_1.default.post('http://localhost:6000/v1/product/create-product', input); // Product Service
-            console.log(response.data.message, "o");
-            return response.data.message;
+            return productService_1.default.createProduct(input);
         }),
         placeOrder: (_1, _a) => __awaiter(void 0, [_1, _a], void 0, function* (_, { input }) {
-            const response = yield axios_1.default.post('http://localhost:7000/v1/orders/create-order', input); // Order Service
-            console.log(response.data.message, "order placed...");
-            return {
-                id: response.data.message.id,
-                items: response.data.message.items,
-            };
+            return orderService_1.default.placeOrder(input);
         })
     }
 };
-exports.default = resolvers;

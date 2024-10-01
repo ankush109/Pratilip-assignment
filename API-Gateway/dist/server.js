@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const apollo_server_express_1 = require("apollo-server-express");
 const schema_1 = __importDefault(require("./schema"));
-const resolver_1 = __importDefault(require("./resolver"));
+const resolver_1 = require("./resolver");
 const express_1 = __importDefault(require("express"));
 const app = (0, express_1.default)();
 // Middleware to parse JSON requests
@@ -22,7 +22,7 @@ app.use(express_1.default.json());
 // Create an instance of Apollo Server
 const server = new apollo_server_express_1.ApolloServer({
     typeDefs: schema_1.default,
-    resolvers: resolver_1.default,
+    resolvers: resolver_1.resolvers,
     context: ({ req }) => ({ req }), // Pass the request object to context
 });
 // Start the Apollo Server
