@@ -36,6 +36,9 @@ export const resolvers = {
     },
     placeOrder: async (_: any, { input }: { input: any }) => {
       return OrderService.placeOrder(input);
+    },
+    loginUser:async(_:any,{input}:{input:any})=>{
+      return UserService.loginUser(input)
     }
   }
 };

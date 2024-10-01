@@ -13,23 +13,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = __importDefault(require("axios"));
-// Define the OrderService object
 const OrderService = {
-    // Fetch all orders
+    // Fetch all orders ->
     getAllOrders() {
         return __awaiter(this, void 0, void 0, function* () {
             const response = yield axios_1.default.get('http://localhost:7000/v1/orders/get-all-orders');
             return response.data.message;
         });
     },
-    // Fetch order by ID
+    // Fetch order by ID ->
     getOrderById(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const response = yield axios_1.default.get(`http://localhost:7000/v1/orders/get-order/${id}`);
             return response.data.message[0];
         });
     },
-    // Place a new order
+    // Place a new order ->
     placeOrder(input) {
         return __awaiter(this, void 0, void 0, function* () {
             const response = yield axios_1.default.post('http://localhost:7000/v1/orders/create-order', input);

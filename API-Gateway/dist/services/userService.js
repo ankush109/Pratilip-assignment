@@ -13,26 +13,31 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = __importDefault(require("axios"));
-// Define the UserService object
 const UserService = {
-    // Fetch all users
+    // Fetch all users -> 
     getAllUsers() {
         return __awaiter(this, void 0, void 0, function* () {
             const response = yield axios_1.default.get('http://localhost:5000/v1/user/users');
             return response.data.message;
         });
     },
-    // Fetch user by ID
+    // Fetch user by ID ->
     getUserById(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const response = yield axios_1.default.get(`http://localhost:5000/v1/user/single-user/${id}`);
             return response.data.message;
         });
     },
-    // Register a new user
+    // Register a new user ->
     registerUser(input) {
         return __awaiter(this, void 0, void 0, function* () {
             const response = yield axios_1.default.post('http://localhost:5000/v1/auth/register', input);
+            return response.data.message;
+        });
+    },
+    loginUser(input) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const response = yield axios_1.default.post('http://localhost:5000/v1/auth/login', input);
             return response.data.message;
         });
     }

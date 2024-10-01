@@ -17,7 +17,12 @@ const UserService = {
   async registerUser(input: any) {
     const response = await axios.post('http://localhost:5000/v1/auth/register', input);
     return response.data.message;
+  },
+  async loginUser(input: any) {
+    const response = await axios.post('http://localhost:5000/v1/auth/login', input);
+    return response.data.message;
   }
+
 };
 
 export default UserService;

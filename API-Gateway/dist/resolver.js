@@ -47,6 +47,9 @@ exports.resolvers = {
         }),
         placeOrder: (_1, _a) => __awaiter(void 0, [_1, _a], void 0, function* (_, { input }) {
             return orderService_1.default.placeOrder(input);
+        }),
+        loginUser: (_1, _a) => __awaiter(void 0, [_1, _a], void 0, function* (_, { input }) {
+            return userService_1.default.loginUser(input);
         })
     }
 };
