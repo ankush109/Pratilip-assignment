@@ -9,9 +9,9 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: users
     ports:
-      - "5432:5432"  # User DB port
+      - "5432:5432"  
     volumes:
-      - userdb-data:/var/lib/postgresql/data  # Separate volume for userdb
+      - userdb-data:/var/lib/postgresql/data 
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
       interval: 10s
@@ -27,9 +27,9 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: prods
     ports:
-      - "5433:5432"  # Changed port to avoid conflict
+      - "5433:5432" 
     volumes:
-      - proddb-data:/var/lib/postgresql/data  # Separate volume for proddb
+      - proddb-data:/var/lib/postgresql/data 
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
       interval: 10s
@@ -45,9 +45,9 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: orders
     ports:
-      - "5434:5432"  # Changed port to avoid conflict
+      - "5434:5432"  
     volumes:
-      - orderdb-data:/var/lib/postgresql/data  # Separate volume for orderdb
+      - orderdb-data:/var/lib/postgresql/data  
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
       interval: 10s
@@ -129,11 +129,11 @@ services:
     volumes:
       - ./prometheus.yml:/var/lib/prometheus/prometheus.yml
   grafana:
-    image: grafana/grafana-oss  # Use the Grafana OSS image
-    container_name: grafana       # Set the container name
+    image: grafana/grafana-oss  
+    container_name: grafana     
     ports:
-      - "3000:3000"               # Map port 3000 on the host to port 3000 on the container
-    restart: unless-stopped       # Restart policy for the container
+      - "3000:3000"              
+    restart: unless-stopped  
 
 volumes:
   userdb-data:

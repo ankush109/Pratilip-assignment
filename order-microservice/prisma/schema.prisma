@@ -14,13 +14,18 @@ datasource db {
 }
 
 model Order {
-  id        String      @id @default(cuid()) // Unique identifier for the order
-  userId    String // Reference to the user who placed the order
-  createdAt DateTime    @default(now()) // Timestamp of order creation
-  updatedAt DateTime    @updatedAt // Timestamp of the last update
-  total     Float // Total price of the order
-  status    OrderStatus // Current status of the order
-  items     OrderItem[] // List of items in the order
+  id              String      @id @default(cuid())
+  userId          String
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  shippingAddress String
+  pincode         String
+  city            String
+  country         String
+  phoneNumber     String
+  total           Float
+  status          OrderStatus
+  items           OrderItem[]
 }
 
 model OrderItem {

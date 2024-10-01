@@ -14,15 +14,16 @@ const OrderController = {
       const { userId, items } = req.body;
 
       console.log(items,"items")
-      
-
+      const response  = await axios.get(`http://localhost:5000/v1/user/getUserById/${userId}`)
+       const user = response.data.message.profile
+      console.log(user,"user... ")
       let total = 0;
 
       // Fetch product data for each item and handle insufficient stock
       const productData = await Promise.all(
         items.map(async (item) => {
           const productResponse = await axios.get(
-            `http://product-service:6000/v1/product/get-product/${item?.productId}`
+            `http://localhost:6000/v1/product/get-product/${item?.productId}`
           );
           const product = productResponse.data.message;
 
@@ -59,6 +60,11 @@ const OrderController = {
           userId,
           total,
           status: "PENDING",
+          shippingAddress:user.shippingAddress,
+          phoneNumber:user.phoneNumber,
+          city:user.city,
+          country:user.country,
+          pincode:user.pincode,
           items: {
             create: productData.map((item) => ({
               productId: item.productId,

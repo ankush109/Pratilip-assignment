@@ -32,13 +32,12 @@ async function handleEvent(event: { eventType: string; data: any }) {
       console.log(
         `Handling user registration for userId: ${event.data.userId}`
       );
-      // Your registration handling logic here
+
       break;
     case "ORDER_PLACED":
       console.log(`Handling order placed for orderId: ${event.data.orderId}`);
       const items = event.data.items;
 
-      // Loop through the items and update inventory accordingly
       items.forEach(async (item: any) => {
         console.log(
           `Updating inventory for item: ${item.productId}, Quantity: ${item.quantity}`
@@ -59,7 +58,7 @@ async function handleEvent(event: { eventType: string; data: any }) {
         }
       });
       break;
-    // Add more cases as needed
+
     default:
       console.log(`Unknown event type: ${event.eventType}`);
   }

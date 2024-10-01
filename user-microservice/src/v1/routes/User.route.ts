@@ -11,4 +11,5 @@ router.get("/users",registerController.getAllusers)
 router.get("/get-my-details",authMiddleware,ProfileController.getUserDetails)
 router.post("/validate-token",loginController.validateJWTToken)
 router.get("/single-user/:id",registerController.getUserById)
+router.get("/getUserById/:id",ProfileController.getUserById)
 export default router;
