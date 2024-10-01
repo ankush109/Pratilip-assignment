@@ -78,7 +78,9 @@ services:
       RABBITMQ_URL: amqp://rabbitmq:5672
     depends_on:
       orderdb:
-        condition: service_healthy
+         condition: service_healthy
+      rabbitmq:
+        condition: service_started
     command: >
       sh -c "npx prisma migrate deploy && npm run dev"  # Apply migrations before running the app
     env_file:
@@ -93,16 +95,24 @@ services:
     depends_on:
       orderdb:
         condition: service_healthy
+      rabbitmq:
+        condition: service_started
     command: >
       sh -c "npx prisma migrate deploy && npm run dev"  # Apply migrations before running the app
     env_file:
       - ./product-microservice/.env
-  # api-gateway-service:
-  #   build: ./API-gateway
-  #   ports:
-  #     - "4000:4000"
+  api-gateway-service:
+    build: ./API-gateway
+    ports:
+      - "4000:4000"
       
-
+  redis:
+    image: redis:alpine
+    container_name: redis_cache
+    ports:
+      - "6389:6379"
+    volumes:
+      - redis_data:/data     
   rabbitmq:
     image: rabbitmq:3-management
     restart: always
@@ -117,3 +127,4 @@ volumes:
   userdb-data:
   proddb-data:
   orderdb-data:
+  redis_data:

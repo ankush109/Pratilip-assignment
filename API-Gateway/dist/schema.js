@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const apollo_server_1 = require("apollo-server");
-// Define the GraphQL schema
 const typeDefs = (0, apollo_server_1.gql) `
   # User type definition
   type User {

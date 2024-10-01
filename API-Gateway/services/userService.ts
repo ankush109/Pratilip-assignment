@@ -3,13 +3,13 @@ import axios from 'axios';
 const UserService = {
   // Fetch all users -> 
   async getAllUsers() {
-    const response = await axios.get('http://localhost:5000/v1/user/users');
+    const response = await axios.get('http://user-service:5000/v1/user/users');
     return response.data.message;
   },
 
   // Fetch user by ID ->
   async getUserById(id: string) {
-    const response = await axios.get(`http://localhost:5000/v1/user/single-user/${id}`);
+    const response = await axios.get(`http://user-service:5000/v1/user/single-user/${id}`);
     return response.data.message;
   },
 

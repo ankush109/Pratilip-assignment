@@ -1,7 +1,5 @@
 import { gql } from "apollo-server";
 
-
-// Define the GraphQL schema
 const typeDefs = gql`
   # User type definition
   type User {

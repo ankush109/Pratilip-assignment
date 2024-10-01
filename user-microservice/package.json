@@ -1,7 +1,6 @@
 {
   "name": "user-microservice",
   "version": "0.1.0",
-  "description": "API Starter Created by @pinakipb2",
   "main": "app.js",
   "scripts": {
     "test": "vitest",
@@ -12,7 +11,7 @@
     "lint-fix": "eslint src/**/*.ts --fix"
   },
   "keywords": [],
-  "author": "Pinaki Bhattacharjee <pinakipb2@gmail.com>",
+  "author": "",
   "license": "MIT",
   "dependencies": {
     "@prisma/client": "^5.20.0",
