@@ -4,7 +4,7 @@ import axios from 'axios';
 const ProductService = {
   // Fetch all products ->
   async getAllProducts() {
-    const response = await axios.get('http://localhost:6000/v1/product/get-all-products');
+    const response = await axios.get('http://product-service:6000/v1/product/get-all-products');
     return response.data.message;
   },
 
