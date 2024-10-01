@@ -8,7 +8,8 @@ import JWTService from "../service/JWTService";
 import { customResponse } from "../utils/Response.util";
 import { z, ZodError } from "zod";
 import { JwtPayload } from "jsonwebtoken";
-const prisma = new PrismaClient();
+import { prisma } from "../../db";
+
 interface AuthRequestBody {
   token: string;
 }

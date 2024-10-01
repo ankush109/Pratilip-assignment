@@ -32,7 +32,7 @@ const corsOption = {
   origin: [String(process.env.FRONTEND_URL)],
 };
 
-const app: Express = express();
+export const app: Express = express();
 
 // Global variable appRoot with base dirname
 global.appRoot = path.resolve(__dirname);
