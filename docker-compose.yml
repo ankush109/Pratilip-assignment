@@ -122,6 +122,18 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
+  prom-server:
+    image: prom/prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus.yml:/var/lib/prometheus/prometheus.yml
+  grafana:
+    image: grafana/grafana-oss  # Use the Grafana OSS image
+    container_name: grafana       # Set the container name
+    ports:
+      - "3000:3000"               # Map port 3000 on the host to port 3000 on the container
+    restart: unless-stopped       # Restart policy for the container
 
 volumes:
   userdb-data:

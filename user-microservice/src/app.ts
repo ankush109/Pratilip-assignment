@@ -37,6 +37,17 @@ export const app: Express = express();
 // Global variable appRoot with base dirname
 global.appRoot = path.resolve(__dirname);
 
+const collectDefaultMetrics = client.collectDefaultMetrics;
+collectDefaultMetrics(
+  {
+    register:client.register
+  }
+)
+
+
+
+
+
 // Middlewares
 app.use(helmet());
 app.set("trust proxy", 1);
@@ -45,7 +56,8 @@ app.use(cors(corsOption));
 app.use(express.json());
 //app.use(requestCountMiddleware)
 app.use(httpMicrosecond)
-app.use(monitoringMiddleware)
+// app.use(monitoringMiddleware)
+
 app.use(express.urlencoded({ extended: false }));
 app.use(morgan("dev"));
 app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
