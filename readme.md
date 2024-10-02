@@ -1,4 +1,4 @@
-# PRATILIPI ASSIGNMENT DETAILS :
+# REPO DETAILS :
 
 1. STARTUP GUIDE :
 
@@ -15,8 +15,11 @@ git clone https://github.com/ankush109/Pratilip-assignment.git
 ```bash
 docker compose up --build
 ```
+#  DETAILS ABOUT EACH SERVICE :
 
-1. DETAILS ABOUT EACH SERVICE :
+   
+![](https://github.com/ankush109/Pratilipi/blob/main/images/Microservices.png?raw=true)
+
 
 ## USER SERVICE :
 
