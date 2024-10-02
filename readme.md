@@ -12,6 +12,8 @@ git clone https://github.com/ankush109/Pratilip-assignment.git
 ```bash
 docker compose up --build
 ```
+
+Note: Please make sure ports 5000 , 6000 , 7000 are available or it might cause an error while running the containers 
  Please make sure all the services are running else run the command again : 
  
  ![](https://github.com/ankush109/Pratilipi/blob/main/images/show.png?raw=true) 
@@ -81,3 +83,9 @@ Authentication :
 ## Monitoring Services ( Prometheus & Graphana )
 
 ![](https://github.com/ankush109/Pratilipi/blob/main/images/graphana.png?raw=true)
+
+# What can be do to Scale this system well I have some ideas ( according to my undestanding )
+
+![](https://raw.githubusercontent.com/ankush109/Pratilipi/refs/heads/main/images/advance-architecure.png)
+
+
