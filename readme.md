@@ -23,7 +23,15 @@ Note: Please make sure ports 5000 , 6000 , 7000 are available or it might cause 
 3. Please note some routes are protected so Kindly login it gives accesstoken
    put the access token as Bearer Token else the requst will fail ( for some routes )
 
+STEP 1. REGISTER A NEW USEER
+STEP 2. LOGIN AND GET THE ACCESS TOKEN 
+STEP 3. MAKE A FEW  PRODUCTS
+STEP 4. PLACING AND ORDER : - ( 2 things are required here ) 
+        i. userId ( get it from the register reponse or get all users route )
+        
+        ii. product_id and the quantity 
 
+     please check the postman collection overall the flow will be like this I have provided everything in the postman collection itself 
 
 # DETAILS ABOUT EACH MICRO-SERVICES :
 
