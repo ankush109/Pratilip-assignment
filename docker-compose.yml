@@ -131,7 +131,7 @@ services:
       RABBITMQ_DEFAULT_PASS: guest
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
-    healthcheck:  # Adding health check for RabbitMQ
+    healthcheck:  
       test: ["CMD-SHELL", "rabbitmqctl await_startup"]
       interval: 10s
       timeout: 5s
