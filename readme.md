@@ -27,11 +27,9 @@ STEP 1. REGISTER A NEW USEER
 STEP 2. LOGIN AND GET THE ACCESS TOKEN 
 STEP 3. MAKE A FEW  PRODUCTS
 STEP 4. PLACING AND ORDER : - ( 2 things are required here ) 
-        i. userId ( get it from the register reponse or get all users route )
-        
-        ii. product_id and the quantity 
-
-     please check the postman collection overall the flow will be like this I have provided everything in the postman collection itself 
+        i)  userId ( get it from the register reponse or get all users route )
+       ii)  product_id and the quantity , 
+       PS:)    please check the postman collection overall the flow will be like this I have provided everything in the postman collection itself 
 
 # DETAILS ABOUT EACH MICRO-SERVICES :
 
