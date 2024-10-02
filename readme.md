@@ -73,12 +73,18 @@ Authentication :
 
 2.  Used Redis as a caching layer to cache some queries (List all products )
 
-3.  Invalidate the cache once a new product is created to avoid stale date to the Client
+3.  Invalidate the cache once a new product is created to avoid stale data to the Client
 
 ## PUB SUB (RABBIT MQ)
 
 1.  Primary used for each service to talk to another service and trigger some events
-2.  Producer publishes some event into the queue and the consumer has subscribed to the events consumes those
+2.  Producer publishes some event into the queue and the consumer has subscribed to the events consumes 
+
+
+## Redis (Act as a  Caching layer in the Api-Gateway ) 
+
+1.  Primary used to cache data (like the list of products frequently queried by the client to make them faster )
+
 
 ## Monitoring Services ( Prometheus & Graphana )
 
