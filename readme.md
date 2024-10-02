@@ -20,8 +20,6 @@ docker compose up --build
 
 ![](https://github.com/ankush109/Pratilipi/blob/main/images/Microservices.png?raw=true)
 
-d
-
 ## USER SERVICE :
 
 1.  The USER SERVICE is responsible for handling User Registrations , Login ,Profile
@@ -63,3 +61,12 @@ d
 2.  Used Redis as a caching layer to cache some queries (List all products )
 
 3.  Invalidate the cache once a new product is created to avoid stale date to the Client
+
+## PUB SUB (RABBIT MQ)
+
+1.  Primary used for each service to talk to another service and trigger some events
+2.  Producer publishes some event into the queue and the consumer has subscribed to the events consumes those
+
+## Monitoring Services ( Prometheus & Graphane )
+
+![](https://github.com/ankush109/Pratilipi/blob/main/images/graphana.png?raw=true)
