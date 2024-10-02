@@ -4,7 +4,7 @@
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/ankush109/Pratilip-assignment.git
+git clone https://github.com/ankush109/Pratilipi.git
 ```
 
 2. Build and Run the docker ( please retry if fails once but will work I test it thoroughly) :
@@ -84,7 +84,7 @@ Authentication :
 
 ![](https://github.com/ankush109/Pratilipi/blob/main/images/graphana.png?raw=true)
 
-# What can be do to Scale this system well I have some ideas ( according to my undestanding )
+# What can be do to Scale this system well I have some ideas ( according to my understanding )
 
 ![](https://raw.githubusercontent.com/ankush109/Pratilipi/refs/heads/main/images/advance-architecure.png)
 
