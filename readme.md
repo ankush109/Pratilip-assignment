@@ -46,11 +46,20 @@ d
 
 ## ORDER SERVICE :
 
-    1. The ORDER SERVICE is for
+1. The ORDER SERVICE is for
 
-            a. Making an order it takes (UserId and Items which will contain each productId and its quantity)
+   1. Making an order it takes (UserId and Items which will contain each productId and its quantity)
 
-            b.Gets the User address , phone number By calling a API CALL to USER SERVICE
-            to fetch the user address , phone number , city  and creates the order
+   2. Gets the User address , phone number By calling a API CALL to USER SERVICE
+      to fetch the user address , phone number , city and creates the order
 
-            c.Listens for events "PROFILE UPDATE" to update the order details (user's phone number , address )
+   3. Listens for events "PROFILE UPDATE" to update the order details (user's phone number , address )
+
+## GRAPHQL API GATEWAY :
+
+1.  This API GATEWAY is used to consolidate all the data from diff microservices( USER / PRODUCT / ORDER )
+    and return reponse to the Client without the Client directly dealing with different services
+
+2.  Used Redis as a caching layer to cache some queries (List all products )
+
+3.  Invalidate the cache once a new product is created to avoid stale date to the Client
