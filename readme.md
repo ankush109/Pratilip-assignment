@@ -16,7 +16,10 @@ git clone https://github.com/ankush109/Pratilip-assignment.git
 docker compose up --build
 ```
 
-# DETAILS ABOUT EACH SERVICE :
+3. Please note some routes are protected so Kindly login it gives accesstoken
+   put the access token as Bearer Token else the requst will fail ( for some routes )
+
+# DETAILS ABOUT EACH SERVICES :
 
 ![](https://github.com/ankush109/Pratilipi/blob/main/images/Microservices.png?raw=true)
 
@@ -55,6 +58,12 @@ docker compose up --build
 
 ## GRAPHQL API GATEWAY :
 
+Authentication :
+
+    The request coming to the gateway should contain the bearer token which the gateway
+    sends to the User service which validates the token only after that it can interact with other services
+    Note: Creating a order &  get all users   is protected route
+
 1.  This API GATEWAY is used to consolidate all the data from diff microservices( USER / PRODUCT / ORDER )
     and return reponse to the Client without the Client directly dealing with different services
 
@@ -67,6 +76,6 @@ docker compose up --build
 1.  Primary used for each service to talk to another service and trigger some events
 2.  Producer publishes some event into the queue and the consumer has subscribed to the events consumes those
 
-## Monitoring Services ( Prometheus & Graphane )
+## Monitoring Services ( Prometheus & Graphana )
 
 ![](https://github.com/ankush109/Pratilipi/blob/main/images/graphana.png?raw=true)
