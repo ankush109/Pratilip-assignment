@@ -84,7 +84,7 @@ Authentication :
 
 ![](https://github.com/ankush109/Pratilipi/blob/main/images/graphana.png?raw=true)
 
-# What can be do to Scale this system well I have some ideas ( according to my understanding )
+# What can be do to Scale this system well I have some ideas 
 
 ![](https://raw.githubusercontent.com/ankush109/Pratilipi/refs/heads/main/images/advance-architecure.png)
 
