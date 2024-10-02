@@ -89,3 +89,11 @@ Authentication :
 ![](https://raw.githubusercontent.com/ankush109/Pratilipi/refs/heads/main/images/advance-architecure.png)
 
 
+1. The main entry point of the client request will hit the gateway which can first authenticate the request by sending the request to a AUTH SERVICE
+2. The gateway on getting a request checks the Service Discovery to located the load balancer of the service need to be hit
+3. The load balancer further balances the number of requests based on some algorithm like Round Robbin , etc
+4. Can be made in Auto scaling groups with Kubernates ( Not aware of that part )  but would likely scale the pods of a particular service on getting high
+   number of requests to ensure availability of the systems .
+
+
+
