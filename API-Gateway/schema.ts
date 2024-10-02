@@ -1,14 +1,14 @@
 import { gql } from "apollo-server";
 
 const typeDefs = gql`
-  # User type definition
+
   type User {
     id: ID!
     name: String!
     email: String!
   }
 
-  # Product type definition
+  
   type Product {
     id: ID!
     name: String!
@@ -17,11 +17,11 @@ const typeDefs = gql`
     description: String!
   }
 
-  # Order type definition
+ 
   type Order {
     id: ID!
     userId: ID!
-    items: [OrderItem!]!  # Make sure this matches how you return the items in the resolver
+    items: [OrderItem!]! 
     total: Float!
     status: String!
     shippingAddress: String!
@@ -31,9 +31,9 @@ const typeDefs = gql`
     phoneNumber: String!
   }
 
-  # OrderItem type definition (nested inside Order)
+
   type OrderItem {
-    id: ID!                # Unique identifier for the order item
+    id: ID!                
     productId: ID!
     quantity: Int!
     price: Float!
@@ -41,26 +41,25 @@ const typeDefs = gql`
 
   # Queries for fetching data
   type Query {
-    # Fetch all users
+   
     users: [User!]!
 
-    # Fetch a single user by ID
+    
     user(id: ID!): User
 
-    # Fetch all products
     products: [Product!]!
 
-    # Fetch a single product by ID
+   
     product(id: ID!): Product
 
-    # Fetch all orders
+   
     orders: [Order!]!
 
-    # Fetch a single order by ID
+    
     order(id: ID!): Order
   }
 
-  # Input types for mutations
+ 
   input RegisterInput {
     name: String!
     email: String!
@@ -97,16 +96,15 @@ const typeDefs = gql`
 
   # Mutations for creating or updating data
   type Mutation {
-    # Register a new user
+   
     registerUser(input: RegisterInput!): User!
 
-    # Create a new product (admin-only)
+   
     createProduct(input: ProductInput!): Product!
 
-    # User login
+    
     loginUser(input: LoginInput!): AuthTokens!
 
-    # Place a new order
     placeOrder(input: OrderInput!): Order!
   }
 `;

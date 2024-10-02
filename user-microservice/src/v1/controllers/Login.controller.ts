@@ -175,20 +175,17 @@ export const loginController = {
     next: NextFunction
   ): Promise<void> {
     try {
-      // Extract the token from request headers or body
       const { token } = req.body;
       if (!token) {
         res.status(400).json({ message: "Token not provided" });
       }
 
-      // Remove "Bearer " part if present
       const serializedToken = token.startsWith("Bearer ")
         ? token.split(" ")[1]
         : token;
 
       console.log(serializedToken, "token from headers...");
 
-      // Decode the token to get user information
       const decodedUser = JWTService.decode(serializedToken) as JwtPayload;
       const userId = decodedUser?.id;
 
@@ -201,14 +198,12 @@ export const loginController = {
         );
       }
 
-      // Fetch user from the database
       const user = await prisma.user.findUniqueOrThrow({
         where: {
           id: userId,
         },
       });
 
-      // Verify the token
       JWTService.verify(
         serializedToken,
         userId,
@@ -219,8 +214,8 @@ export const loginController = {
         customResponse(201, {
           success: true,
           message: {
-            token:token,
-            user:user
+            token: token,
+            user: user,
           },
         })
       );

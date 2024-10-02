@@ -9,7 +9,7 @@ const ProductSchema = z.object({
   name: z.string(),
   description: z.string(),
   price: z.number(),
-  stock:z.number()
+  stock: z.number(),
 });
 const prisma = new PrismaClient();
 const ProductController = {
@@ -19,125 +19,118 @@ const ProductController = {
     next: NextFunction
   ): Promise<void> {
     try {
-      //  const {name,description,price} =req.body;
       const resp = await ProductSchema.parseAsync(req.body);
-    const product =   await prisma.product.create({
+      const product = await prisma.product.create({
         data: {
           name: resp.name,
           description: resp.description,
           price: resp.price,
-          stock:resp.stock
+          stock: resp.stock,
         },
       });
-      const message= {
-        name:product.name,
-        id:product.id,
-        price:product.price,
-        stoc:product.stock,
-        description:product.description
-      }
-      await publishEvent(message,"product_created")
+      const message = {
+        name: product.name,
+        id: product.id,
+        price: product.price,
+        stoc: product.stock,
+        description: product.description,
+      };
+      await publishEvent(message, "product_created");
       res.json(customResponse(200, product));
-      
     } catch (err) {
       next(createError.InternalServerError());
     }
   },
-    async updateProduct(
+  async updateProduct(
     req: Request,
     res: Response,
     next: NextFunction
   ): Promise<void> {
     try {
-      //  const {name,description,price} =req.body;
-      const {id} =req.params
+      const { id } = req.params;
       const resp = await ProductSchema.parseAsync(req.body);
       const product = await prisma.product.update({
-        where:{
-          id:id
+        where: {
+          id: id,
         },
-        data:{
+        data: {
           name: resp.name,
           description: resp.description,
           price: resp.price,
-          stock:resp.stock
-
-        }
+          stock: resp.stock,
+        },
       });
-      const message= {
-        name:product.name,
-        id:product.id,
-        price:product.price,
-        stoc:product.stock,
-        description:product.description
-      }
-      await publishEvent(message,"product_updated")
+      const message = {
+        name: product.name,
+        id: product.id,
+        price: product.price,
+        stoc: product.stock,
+        description: product.description,
+      };
+      await publishEvent(message, "product_updated");
       res.json(customResponse(200, "Product Updated Successfully!"));
     } catch (err) {
       next(createError.InternalServerError());
     }
   },
-     async getProductDetails(
+  async getProductDetails(
     req: Request,
     res: Response,
     next: NextFunction
   ): Promise<void> {
     try {
-      //  const {name,description,price} =req.body;
-      const {id} =req.params
-      
+      const { id } = req.params;
+
       const product = await prisma.product.findUniqueOrThrow({
-        where:{
-          id:id
+        where: {
+          id: id,
         },
-       
       });
       res.json(customResponse(200, product));
     } catch (err) {
       next(createError.InternalServerError());
     }
   },
-   async getAllProducts(
+  async getAllProducts(
     req: Request,
     res: Response,
     next: NextFunction
   ): Promise<void> {
     try {
-   
       const products = await prisma.product.findMany({});
       res.json(customResponse(200, products));
     } catch (err) {
       next(createError.InternalServerError());
     }
   },
-    async deleteProduct(
+  async deleteProduct(
     req: Request,
     res: Response,
     next: NextFunction
   ): Promise<void> {
     try {
-     const {id} = req.params
-       await prisma.product.delete({
-        where:{
-          id:id
-        }
+      const { id } = req.params;
+      await prisma.product.delete({
+        where: {
+          id: id,
+        },
       });
       res.json(customResponse(200, "product deleted successfully!"));
     } catch (err) {
       next(createError.InternalServerError());
     }
   },
-   async getProductById(
+  async getProductById(
     req: Request,
     res: Response,
     next: NextFunction
   ): Promise<void> {
     try {
-     const {id} = req.params
-     const product =   await prisma.product.findFirstOrThrow({
-        where:{
-          id:id
-        }
+      const { id } = req.params;
+      const product = await prisma.product.findFirstOrThrow({
+        where: {
+          id: id,
+        },
       });
       res.json(customResponse(200, product));
     } catch (err) {

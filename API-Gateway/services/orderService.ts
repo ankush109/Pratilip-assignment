@@ -1,19 +1,19 @@
 import axios from 'axios';
 
 const OrderService = {
-  // Fetch all orders ->
+ 
   async getAllOrders() {
     const response = await axios.get('http://order-service:7000/v1/orders/get-all-orders');
     return response.data.message;
   },
 
-  // Fetch order by ID ->
+  
   async getOrderById(id: string) {
     const response = await axios.get(`http://order-service:7000/v1/orders/get-order/${id}`);
     return response.data.message[0];
   },
 
-  // Place a new order ->
+
   async placeOrder(input: any) {
     console.log(input,"ionput from order creation..")
     const response = await axios.post('http://order-service:7000/v1/orders/create-order', input);

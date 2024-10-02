@@ -13,13 +13,14 @@ const OrderController = {
     try {
       const { userId, items } = req.body;
 
-      console.log(items,"items")
-      const response  = await axios.get(`http://user-service:5000/v1/user/getUserById/${userId}`)
-       const user = response.data.message.profile
-      console.log(user,"user... ")
+      console.log(items, "items");
+      const response = await axios.get(
+        `http://user-service:5000/v1/user/getUserById/${userId}`
+      );
+      const user = response.data.message.profile;
+      console.log(user, "user... ");
       let total = 0;
 
-      // Fetch product data for each item and handle insufficient stock
       const productData = await Promise.all(
         items.map(async (item) => {
           const productResponse = await axios.get(
@@ -28,7 +29,6 @@ const OrderController = {
           const product = productResponse.data.message;
 
           if (item.quantity > product.stock) {
-            // If stock is insufficient, send a 401 response and stop execution
             res
               .status(401)
               .json(
@@ -40,31 +40,26 @@ const OrderController = {
             throw new Error("Insufficient stock");
           }
 
-          // Calculate the total price for each item
           const itemTotalPrice = product.price * item.quantity;
           total += itemTotalPrice;
 
           return {
             ...item,
-            price: product.price, // Set the product price from the Product Service
+            price: product.price,
           };
         })
       );
 
-      // Check if productData contains null values (in case of insufficient stock)
-     
-
-      // Create the order in the database
       const order = await prisma.order.create({
         data: {
           userId,
           total,
           status: "PENDING",
-          shippingAddress:user.shippingAddress,
-          phoneNumber:user.phoneNumber,
-          city:user.city,
-          country:user.country,
-          pincode:user.pincode,
+          shippingAddress: user.shippingAddress,
+          phoneNumber: user.phoneNumber,
+          city: user.city,
+          country: user.country,
+          pincode: user.pincode,
           items: {
             create: productData.map((item) => ({
               productId: item.productId,
@@ -80,7 +75,6 @@ const OrderController = {
 
       console.log(productData, "products data....");
 
-      // Publish the event after the order is successfully created
       const message = {
         orderId: order.id,
         items: order.items,
@@ -89,12 +83,10 @@ const OrderController = {
       };
       await publishEvent(message, "ORDER_PLACED");
 
-      // Send the success response
       res.json(customResponse(200, order));
     } catch (err) {
       console.error(err);
       if (!res.headersSent) {
-        // Send an error response only if the headers have not already been sent
         res.status(500).json({ error: "Failed to create order" });
       }
     }
@@ -139,40 +131,31 @@ const OrderController = {
       console.log(err, "erre//");
     }
   },
-  async getAllorders(   req: Request,
-    res: Response,
-    next: NextFunction){
-  try{
-   const allorders = await prisma.order.findMany({
-    include:{
-      items:true
-    }
-   })
-   res.json(customResponse(200,allorders))
-  }catch(err){
-   
-  }
+  async getAllorders(req: Request, res: Response, next: NextFunction) {
+    try {
+      const allorders = await prisma.order.findMany({
+        include: {
+          items: true,
+        },
+      });
+      res.json(customResponse(200, allorders));
+    } catch (err) {}
   },
-   async getAllorderById(   req: Request,
-    res: Response,
-    next: NextFunction){
-  try{
-    const {id}=req.params
-   const order = await prisma.order.findMany({
-    where:{
-      id:id
-    },
-     include:{
-      items:true
-       
-    }
-   })
-   console.log(order,"order")
-   res.json(customResponse(200,order))
-  }catch(err){
-   
-  }
-  }
+  async getAllorderById(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+      const order = await prisma.order.findMany({
+        where: {
+          id: id,
+        },
+        include: {
+          items: true,
+        },
+      });
+      console.log(order, "order");
+      res.json(customResponse(200, order));
+    } catch (err) {}
+  },
 };
 
 export default OrderController;
