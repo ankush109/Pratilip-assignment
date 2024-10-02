@@ -23,7 +23,7 @@ Note: Please make sure ports 5000 , 6000 , 7000 are available or it might cause 
 
 
 
-# DETAILS ABOUT EACH SERVICES :
+# DETAILS ABOUT EACH MICRO-SERVICES :
 
 ![](https://github.com/ankush109/Pratilipi/blob/main/images/Microservices.png?raw=true)
 
