@@ -1,6 +1,3 @@
-# REPO DETAILS :
-
-1. STARTUP GUIDE :
 
 ## Docker
 
@@ -15,9 +12,14 @@ git clone https://github.com/ankush109/Pratilip-assignment.git
 ```bash
 docker compose up --build
 ```
-
+ Please make sure all the services are running else run the command again : 
+ 
+ ![](https://github.com/ankush109/Pratilipi/blob/main/images/show.png?raw=true) 
+ 
 3. Please note some routes are protected so Kindly login it gives accesstoken
    put the access token as Bearer Token else the requst will fail ( for some routes )
+
+
 
 # DETAILS ABOUT EACH SERVICES :
 
