@@ -172,6 +172,19 @@ query GetOrders{
   }
 }
 
+# get order by id 
+query Order {
+  order(id: "cm1r07j180000ty7ktpnqunc9") { # replace with order Id
+    id
+    userId
+    items {
+      price
+      quantity
+      productId
+    }
+  }
+}
+
 # get product By Id 
 query getProducts {
   product(id: "cm1qya1580000bh9wwyn2rnnf") {
@@ -183,6 +196,14 @@ query getProducts {
   }
 }
 
+# Get User By Id 
+query GetUsr{
+  user(id: "use_id") {
+      email
+      id
+      name
+  }
+}
 
 
 
