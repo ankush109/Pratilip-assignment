@@ -25,6 +25,238 @@
 
 ---
 
+
+```graphql
+ type User {
+    id: ID!
+    name: String!
+    email: String!
+  }
+
+  
+  type Product {
+    id: ID!
+    name: String!
+    price: Float!
+    stock: Int!
+    description: String!
+  }
+
+ 
+  type Order {
+    id: ID!
+    userId: ID!
+    items: [OrderItem!]! 
+    total: Float!
+    status: String!
+    shippingAddress: String!
+    pincode: String!
+    city: String!
+    country: String!
+    phoneNumber: String!
+  }
+
+
+  type OrderItem {
+    id: ID!                
+    productId: ID!
+    quantity: Int!
+    price: Float!
+  }
+
+  # Queries for fetching data
+  type Query {
+   
+    users: [User!]!
+
+    
+    user(id: ID!): User
+
+    products: [Product!]!
+
+   
+    product(id: ID!): Product
+
+   
+    orders: [Order!]!
+
+    
+    order(id: ID!): Order
+  }
+
+ 
+  input RegisterInput {
+    name: String!
+    email: String!
+    password: String!
+  }
+
+  input ProductInput {
+    name: String!
+    price: Float!
+    description: String!
+    stock: Int!
+  }
+
+  input LoginInput {
+    email: String!
+    password: String!
+  }
+
+  input OrderInput {
+    userId: ID!
+    items: [OrderItemInput!]!
+
+  }
+
+  input OrderItemInput {
+    productId: ID!
+    quantity: Int!
+  }
+
+  type AuthTokens {
+    accessToken: String!
+    refreshToken: String!
+  }
+
+  # Mutations for creating or updating data
+  type Mutation {
+   
+    registerUser(input: RegisterInput!): User!
+
+   
+    createProduct(input: ProductInput!): Product!
+
+    
+    loginUser(input: LoginInput!): AuthTokens!
+
+    placeOrder(input: OrderInput!): Order!
+  }
+
+
+
+```
+# Sample queries
+
+```graphql
+# get all users : (give accesstoken in Authorization headers )
+query GetUsers{
+  users {
+     email
+     id
+     name 
+  } 
+}
+
+# get all products
+
+query getProducts{
+  products {
+    id
+    stock
+    price
+    name
+    description
+  } 
+}
+
+# get all the orders 
+query GetOrders{
+  orders {
+    id
+    items {
+      price
+      quantity
+      productId
+    } 
+  }
+}
+
+# get product By Id 
+query getProducts {
+  product(id: "cm1qya1580000bh9wwyn2rnnf") {
+    id
+    stock
+    price
+    name
+    description
+  }
+}
+
+
+
+
+
+# Making a order (authenticated provided access token you got from login response ) 
+mutation PlaceOrder {
+  placeOrder(input: {
+   userId:"cm1q1lerp000012aiouc66hx3" # replace with a user ID 
+    items: [
+      {
+        productId: "cm1q5946u0000p58yli8l75qd",  # replace with a product Id
+        quantity: 2
+      },
+      
+    ]
+  }) {
+    id
+     
+   items {
+    price
+    quantity
+   }
+    
+  }
+}
+
+# Regiser
+
+mutation RegisterUser {
+  registerUser(
+    input: {
+      name: "John Doe",
+      email: "jon.doe@example.com",
+      password: "securepassword"
+    }
+  ) {
+    id
+    name
+    email
+  }
+}
+
+# Login
+mutation LoginUser {
+  loginUser(input: { 
+    email: "jon.doe@example.com", 
+    password: "securepassword" 
+  }) {
+    accessToken
+    refreshToken
+  }
+}
+
+# Create a new product : 
+mutation CreateProduct {
+  createProduct(
+    input: {
+      name: "Sample Product",
+      price: 29.99,
+      stock: 50,
+      description: "This is a description for a sample product."
+    }
+  ) {
+    id
+    name
+    price
+    stock
+    description
+  }
+}
+
+
+
+```
 ## Basic Flow Overview:
 
 - **Step 1:** Register a new user.
